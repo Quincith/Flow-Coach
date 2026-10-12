@@ -4,7 +4,7 @@ import {
   TextInput, View, useColorScheme,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { chat, checkIn, loadSettings, pdfUrl, saveSettings, type Settings } from "./src/api";
+import { chat, checkIn, loadSettings, pdfUrl, saveSettings, todayMessages, type Settings } from "./src/api";
 import { authorize, syncHealth } from "./src/health";
 import { registerBackgroundSync } from "./src/background";
 
@@ -30,6 +30,10 @@ export default function App() {
 
   useEffect(() => {
     if (!settings) return;
+    // The server runs the morning read on a schedule; show whatever is already waiting.
+    todayMessages()
+      .then(({ messages }) => setMsgs(messages.map((m, i) => ({ id: `h${i}`, role: m.role === "user" ? "me" : "coach", text: m.content }))))
+      .catch(() => undefined);
     authorize()
       .then(() => syncHealth(30)) // first run backfills a month so baselines exist
       .then(registerBackgroundSync)

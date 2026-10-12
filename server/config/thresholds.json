@@ -1,5 +1,5 @@
 {
-  "version": "starter-2026-10-12",
+  "version": "approved-2026-10-12",
   "baselineDays": 30,
   "easyWeek": { "windowDays": 14, "redDays": 9 },
   "rules": [

@@ -5,13 +5,16 @@
 //   GET  /today       computed readiness report
 //   POST /checkin     morning read + proposed workout (runs the coach)
 //   POST /chat        { text } reply to the coach; "yes" / "lock it in" renders the PDF
+//   GET  /messages    today's conversation (the scheduled morning read lands here)
 //   GET  /pdf/:date   the approved workout PDF (also accepts ?token=)
+//
+// FLOW_CHECKIN_TIME (HH:MM, athlete's timezone, default 06:30) runs sync + the morning read daily.
 
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { createReadStream, existsSync } from "node:fs";
 import { openDb, upsertReadings } from "./db.ts";
 import { parseHealthPayload, type HealthPayload } from "./sources/healthkit.ts";
-import { buildReport, handleMessage, morningCheckIn, syncAll } from "./service.ts";
+import { buildReport, handleMessage, history, morningCheckIn, syncAll } from "./service.ts";
 
 const db = openDb();
 const TOKEN = process.env.FLOW_API_TOKEN;
@@ -36,6 +39,7 @@ function json(res: ServerResponse, status: number, data: unknown) {
 const server = createServer(async (req, res) => {
   try {
     const url = new URL(req.url ?? "/", "http://local");
+    if (url.pathname === "/healthz") return json(res, 200, { ok: true });
     // PDFs open in the phone's browser, which can't send headers, so they also accept ?token=.
     const authed = req.headers.authorization === `Bearer ${TOKEN}`
       || (url.pathname.startsWith("/pdf/") && url.searchParams.get("token") === TOKEN);
@@ -52,6 +56,7 @@ const server = createServer(async (req, res) => {
       await syncAll(db, date);
       return json(res, 200, await morningCheckIn(db, date));
     }
+    if (req.method === "GET" && url.pathname === "/messages") return json(res, 200, { date, messages: history(db, date) });
     if (req.method === "POST" && url.pathname === "/chat") {
       const { text } = await body<{ text: string }>(req);
       const out = await handleMessage(db, date, text, OUT);
@@ -70,6 +75,24 @@ const server = createServer(async (req, res) => {
     json(res, 500, { error: String(e) });
   }
 });
+
+/** Minute-resolution daily scheduler; good enough for one athlete and avoids a separate cron service. */
+const CHECKIN = process.env.FLOW_CHECKIN_TIME ?? "06:30";
+let lastRun = "";
+setInterval(async () => {
+  const tz = process.env.FLOW_TZ ?? "America/New_York";
+  const hm = new Intl.DateTimeFormat("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date());
+  const today = localDate();
+  if (hm < CHECKIN || lastRun === today) return;
+  lastRun = today;
+  try {
+    await syncAll(db, today);
+    await morningCheckIn(db, today);
+    console.log(`morning check-in done for ${today}`);
+  } catch (e) {
+    console.error("morning check-in failed", e);
+  }
+}, 60_000);
 
 const port = Number(process.env.PORT ?? 8787);
 server.listen(port, () => console.log(`Flow Coach API on :${port}`));

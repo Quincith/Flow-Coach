@@ -61,7 +61,7 @@ export function buildReport(db: DB, date: string): ReadinessReport {
   return analyze(date, readingsBetween(db, from, date), table, { expectedSources: loadAthlete().expectedSources });
 }
 
-function history(db: DB, date: string): ChatTurn[] {
+export function history(db: DB, date: string): ChatTurn[] {
   return db.prepare(`SELECT role, content FROM messages WHERE date = ? ORDER BY id`).all(date) as unknown as ChatTurn[];
 }
 
@@ -69,8 +69,11 @@ function save(db: DB, date: string, role: ChatTurn["role"], content: string) {
   db.prepare(`INSERT INTO messages (date, role, content) VALUES (?, ?, ?)`).run(date, role, content);
 }
 
+/** Runs once per day; a repeat call returns the existing morning message so the chat stays coherent. */
 export async function morningCheckIn(db: DB, date: string): Promise<{ report: ReadinessReport; message: string }> {
   const report = buildReport(db, date);
+  const existing = history(db, date).find((t) => t.role === "assistant");
+  if (existing) return { report, message: existing.content };
   const recent = activitiesBetween(db, addDays(date, -14), date);
   const message = await coachReply(loadAthlete(), report, recent, []);
   save(db, date, "assistant", message);
