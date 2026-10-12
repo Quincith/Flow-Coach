@@ -1,0 +1,60 @@
+{
+  "version": "starter-2026-10-12",
+  "baselineDays": 30,
+  "easyWeek": { "windowDays": 14, "redDays": 9 },
+  "rules": [
+    {
+      "metric": "hrv_rmssd_ms",
+      "label": "HRV (RMSSD)",
+      "higherIsBetter": true,
+      "absolute": { "green": 65, "red": 55 },
+      "baseline": { "kind": "pct", "yellow": 10, "red": 20 },
+      "preferredSources": ["ultrahuman", "oura", "whoop", "garmin", "zepp", "polar"],
+      "divergenceLimit": 12
+    },
+    {
+      "metric": "hrv_sdnn_ms",
+      "label": "HRV (SDNN, Apple Health)",
+      "higherIsBetter": true,
+      "baseline": { "kind": "pct", "yellow": 10, "red": 20 },
+      "preferredSources": ["apple_health", "health_connect"]
+    },
+    {
+      "metric": "resting_hr_bpm",
+      "label": "Resting HR",
+      "higherIsBetter": false,
+      "baseline": { "kind": "abs", "yellow": 4, "red": 7 },
+      "preferredSources": ["ultrahuman", "oura", "whoop", "zepp", "garmin", "apple_health", "health_connect"],
+      "divergenceLimit": 5
+    },
+    {
+      "metric": "sleep_total_min",
+      "label": "Sleep",
+      "higherIsBetter": true,
+      "absolute": { "green": 450, "red": 390 },
+      "preferredSources": ["ultrahuman", "oura", "whoop", "zepp", "garmin", "apple_health", "health_connect"],
+      "divergenceLimit": 45
+    },
+    {
+      "metric": "sleep_deep_min",
+      "label": "Deep sleep",
+      "higherIsBetter": true,
+      "absolute": { "green": 75, "red": 45 },
+      "preferredSources": ["ultrahuman", "oura", "whoop", "zepp", "garmin", "apple_health"]
+    },
+    {
+      "metric": "skin_temp_dev_c",
+      "label": "Skin temp vs normal",
+      "higherIsBetter": false,
+      "absolute": { "green": 0.3, "red": 0.5 },
+      "preferredSources": ["ultrahuman", "oura", "whoop", "apple_health"]
+    },
+    {
+      "metric": "respiratory_rate",
+      "label": "Breathing rate",
+      "higherIsBetter": false,
+      "baseline": { "kind": "abs", "yellow": 1, "red": 2 },
+      "preferredSources": ["ultrahuman", "oura", "whoop", "zepp", "apple_health"]
+    }
+  ]
+}

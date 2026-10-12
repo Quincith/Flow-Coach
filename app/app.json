@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Flow Coach",
+    "slug": "flow-coach",
+    "scheme": "flowcoach",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "com.quincith.flowcoach",
+      "supportsTablet": false,
+      "infoPlist": {
+        "UIBackgroundModes": ["fetch", "processing"]
+      }
+    },
+    "plugins": [
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "NSHealthShareUsageDescription": "Flow Coach reads your sleep, HRV, resting heart rate and workouts to plan each day's training.",
+          "NSHealthUpdateUsageDescription": "Flow Coach does not write to Apple Health.",
+          "background": true
+        }
+      ],
+      "expo-background-task",
+      "expo-notifications",
+      "expo-secure-store"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "flow-coach-app",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "ios": "expo run:ios",
+    "build:ios": "eas build -p ios --profile preview",
+    "test": "node --test --experimental-strip-types test/*.test.ts"
+  },
+  "dependencies": {
+    "@kingstinct/react-native-healthkit": "16.2.0",
+    "expo": "~57.0.28",
+    "expo-background-task": "*",
+    "expo-dev-client": "*",
+    "expo-notifications": "*",
+    "expo-secure-store": "*",
+    "expo-status-bar": "*",
+    "expo-task-manager": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-nitro-modules": "*"
+  },
+  "devDependencies": {
+    "typescript": "*"
+  }
+}

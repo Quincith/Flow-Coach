@@ -1,0 +1,23 @@
+{
+  "name": "Quincy",
+  "timezone": "America/New_York",
+  "expectedSources": ["ultrahuman", "zepp"],
+  "goals": [
+    "Relative strength and calisthenics skills (front lever, planche)",
+    "Athleticism and boxing carryover (power, agility)",
+    "Hyrox and run club conditioning",
+    "Stay lean: strength over hypertrophy"
+  ],
+  "weeklyFramework": {
+    "Mon": "Strength + power",
+    "Tue": "Run club (ceiling, not mandate)",
+    "Wed": "Pull / skill (striqfit Pull Day)",
+    "Thu": "Hyrox stations",
+    "Fri": "Strength + power, push trimmed",
+    "Sat": "Long conditioning or Full Body (trimmed)",
+    "Sun": "Cardio + Mobility or rest"
+  },
+  "injuries": [],
+  "nonNegotiables": [],
+  "equipment": ["pull-up bar", "rings", "sled", "kettlebells", "dumbbells"]
+}

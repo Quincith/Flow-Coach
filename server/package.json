@@ -1,0 +1,25 @@
+{
+  "name": "flow-coach-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "morning": "tsx src/morning.ts",
+    "sample-pdf": "tsx src/samplePdf.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.133.0",
+    "pdfkit": "^0.20.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/pdfkit": "^0.17.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
