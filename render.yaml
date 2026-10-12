@@ -1,0 +1,30 @@
+# One-click deploy on Render: New > Blueprint > pick this repo.
+# Starter plan + 1 GB disk keeps the SQLite database across deploys.
+services:
+  - type: web
+    name: flow-coach
+    runtime: docker
+    rootDir: server
+    plan: starter
+    healthCheckPath: /healthz
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: FLOW_API_TOKEN
+        generateValue: true
+      - key: FLOW_TZ
+        value: America/New_York
+      - key: FLOW_CHECKIN_TIME
+        value: "06:30"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ULTRAHUMAN_TOKEN
+        sync: false
+      - key: ULTRAHUMAN_EMAIL
+        sync: false
+      - key: INTERVALS_ATHLETE_ID
+        sync: false
+      - key: INTERVALS_API_KEY
+        sync: false

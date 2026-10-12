@@ -30,6 +30,7 @@ async function call<T>(method: "GET" | "POST", path: string, body?: unknown): Pr
 }
 
 export const postHealth = (payload: { platform: "ios"; samples: DaySample[] }) => call<{ stored: number }>("POST", "/health", payload);
+export const todayMessages = () => call<{ messages: { role: "user" | "assistant"; content: string }[] }>("GET", "/messages");
 export const checkIn = () => call<{ message: string }>("POST", "/checkin");
 export const chat = (text: string) => call<{ message: string; pdf?: string }>("POST", "/chat", { text });
 

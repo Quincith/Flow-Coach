@@ -37,18 +37,23 @@ npm run morning -- --report-only   # sync + print today's computed report, no Cl
 
 API (all need `Authorization: Bearer $FLOW_API_TOKEN`): `POST /health`, `POST /sync`, `GET /today`, `POST /checkin`, `POST /chat`, `GET /pdf/:date`.
 
+## Deploy (Render)
+
+`render.yaml` deploys the server with a persistent disk. In Render: New > Blueprint > this repo, then fill in the secret env vars. `FLOW_API_TOKEN` is generated for you; copy it into the app. The server runs sync + the morning read every day at `FLOW_CHECKIN_TIME` (default 06:30, `FLOW_TZ`).
+
 ## Build the iPhone app
 
-Needs a Mac with Xcode and the Apple Developer account.
+Needs the Apple Developer account. No Mac needed with EAS (Expo's cloud build).
 
 ```bash
 cd app
 npm install && npx expo install --fix
-npx expo run:ios --device     # or: npx eas build -p ios --profile preview
+npx eas build -p ios --profile preview   # cloud build, installs on your registered iPhone
+# or, on a Mac with Xcode: npx expo run:ios --device
 ```
 
 On first launch enter the server URL and `FLOW_API_TOKEN`, then allow Health access.
 
 ## Status
 
-Milestone 1 (data in + morning read) in progress. Starter threshold table and PDF layout are drafts awaiting approval.
+Milestone 1 (data in + morning read) in progress. Threshold table and PDF layout approved 2026-10-12.
